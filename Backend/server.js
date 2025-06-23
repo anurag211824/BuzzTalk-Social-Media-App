@@ -1,12 +1,18 @@
 import express from "express"; // Importing the Express framework to create a web server
 import cors from "cors"; // Importing CORS middleware to allow cross-origin requests
 import dotenv from "dotenv"; // Importing dotenv to load environment variables from a .env file
+import  connectDb  from "./config/Db.js";
+import  userRoutes from "./routes/UserRoutes.js"
+import cookieParser from "cookie-parser";
 const app = express(); // Creating an instance of an Express application
 
 
 app.use(express.json()); // Middleware to parse incoming JSON requests and make the data available in req.body
 app.use(cors()); // Middleware to enable Cross-Origin Resource Sharing (CORS), allowing frontend apps from different origins to access the backen
+app.use(cookieParser())
 const PORT  = 3000
+dotenv.config();
+connectDb();
 app.get("/", (req, res) => {
   res.set('Content-Type', 'text/html');
   res.send(`
@@ -37,7 +43,7 @@ app.get("/", (req, res) => {
   `);
 });
 //API Routes
-app.use("/api/users",userRoutes)
+app.use("/api/users", userRoutes);
 
 app.listen(PORT, () => {
   console.log(`Sever is Running on ${PORT}`);
